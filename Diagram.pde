@@ -1,19 +1,47 @@
 class Diagram {
   
-  List<Node>node_list = new ArrayList<Node>();
+  ArrayList<Node>node_list = new ArrayList<Node>();
   color node_color = #FFFFFF;
   
+  float getTotalEnergy(){
+    float energy = 0;
+    for(int i = 0; i < node_list.size(); i++){
+      Node node = node_list.get(i);
+      energy += node.getEnergy();
+    }
+    return energy;
+  }
+  
   void drawDiagram(){
-      drawNodes();
-      //draw edges
+    drawEdges();
+    drawNodes();
+  }
+  
+  void drawEdges(){
+    for(int i = 0; i < node_list.size(); i++){
+      Node start = node_list.get(i);
+      for(int j = 0; j < start.connected_nodes.size(); j++){
+        Edge e = start.connected_nodes.get(j);
+        Node end = e.node;
+        strokeWeight(1);
+        float distance = dist(start.x, start.y, end.x, end.y);
+        if(distance < e.length){
+          float maxWeight = 50;
+          float pct = distance/e.length;
+          strokeWeight(maxWeight * pct);  
+        }
+        line(start.x, start.y, end.x, end.y); 
+      }
+    }
+    strokeWeight(1);
   }
   
   void drawNodes() {
       for(int i = 0; i < node_list.size(); i++){   
         Node node = node_list.get(i);
-        int radius = node.mass * 50; //should be proportional to screen size
+        float diameter = node.mass * 50; //should be proportional to screen size
         fill(colorPicker(node));
-        ellipse(node.x, node.y, radius, radius);
+        ellipse(node.x, node.y, diameter, diameter);
         showLabel(node);
       }
   }
@@ -37,6 +65,7 @@ class Diagram {
   void showLabel(Node node) {
     if(mouseHover(node)){
         fill(#000000);
+        textAlign(CENTER,CENTER);
         text("ID: " + node.id + "\nMass: " + node.mass, node.x, node.y);
     } 
   }
@@ -57,8 +86,28 @@ class Diagram {
       String[] line = split(data[j], ","); 
       int id = Integer.parseInt(line[0]);
       int connect_id = Integer.parseInt(line[1]);
-      int length = Integer.parseInt(line[2]);
+      int springLength = Integer.parseInt(line[2]);
+      println("ID "+id);
+      println("connect "+connect_id);
+      println("springLength "+springLength);
       //add edge to node_list[node @ id] 
+      Node startNode = getNodeById(id);
+      Node endNode = getNodeById(connect_id);
+      if(startNode != null && endNode != null){
+        Edge e1 = new Edge(endNode, springLength);
+        startNode.addEdge(e1);
+        Edge e2 = new Edge(startNode, springLength);
+        endNode.addEdge(e2);
+      }
     }
+  }
+  
+  Node getNodeById(int id){
+    for(Node node : node_list){
+      if(node.id == id){
+        return node;  
+      }
+    }
+    return null;  
   }
 }

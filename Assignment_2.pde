@@ -1,6 +1,4 @@
 import java.util.Collections;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 Diagram diagram;
@@ -34,7 +32,6 @@ Diagram createNodes(String[] data){
       int y = ThreadLocalRandom.current().nextInt(100, height - 100);//change later
       Node node = new Node(id, mass, x, y);
       diagram.node_list.add(node);
-      //println("Adding: " + diagram.node_list.get(i - 1).id + ", " + diagram.node_list.get(i-1).mass); tests successful add of node to list
     }
     
     //is 1 connected 2
