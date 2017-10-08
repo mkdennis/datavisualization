@@ -4,12 +4,11 @@ class Diagram {
   color node_color = #FFFFFF;
   PVector coulombForce;
   
-  float coulomb = 0.1;
-  float hooke = .10;
+  float coulomb = 20;
+  float hooke = 6;
   float dampening = 1.0; 
-  float timeStep = 1.0;
-   
-   
+  float timeStep = .03;
+      
   float getTotalEnergy(){
     float energy = 0;
     for(int i = 0; i < node_list.size(); i++){
@@ -36,6 +35,7 @@ class Diagram {
     PVector totalForce = new PVector(0,0);
     for(int i = 0; i < node_list.size(); i++){
       Node otherNode = node_list.get(i); 
+      if(otherNode.id != node.id){
       PVector direction = getDirection(node, otherNode);
       //f = c * q1 * q2 / distance^2
       float d = direction.mag();
@@ -43,6 +43,7 @@ class Diagram {
       float mag = coulomb * charge / (d * d);
       direction.setMag(mag);
       totalForce.add(direction);
+      }
     }
     return totalForce;  
   }
@@ -52,12 +53,12 @@ class Diagram {
     for(int i = 0; i < node.connected_nodes.size(); i++){
       Edge e = node.connected_nodes.get(i);
       Node otherNode = e.node;
-      //f = -k/delta 
+      //f = -k * delta 
       PVector direction = getDirection(node, otherNode);
       float distance = direction.mag();
       //may need to swap around?
       float delta = distance - e.length;
-      float mag = -hooke/delta;
+      float mag = -hooke * delta;
       direction.setMag(mag);
       totalForce.add(direction);
     }
@@ -67,6 +68,18 @@ class Diagram {
   void drawDiagram(){
     drawEdges();
     drawNodes();
+    drawSliders();
+  }
+  
+  void drawSliders(){
+    //slider for size, hook, coul, damp, time step
+    Slider sizeslider = new Slider(20, height-40);
+    Slider hookslider = new Slider(20, height-80);
+    Slider coulslider = new Slider(20, height-120);
+    
+    sizeslider.drawSlider();
+    hookslider.drawSlider();
+    coulslider.drawSlider();
   }
    
   void drawEdges(){
@@ -92,9 +105,8 @@ class Diagram {
       updateNodePositions();
       for(int i = 0; i < node_list.size(); i++){   
         Node node = node_list.get(i);
-        float diameter = node.mass * 50; //should be proportional to screen size
         fill(colorPicker(node));
-        ellipse(node.x, node.y, diameter, diameter);
+        ellipse(node.x, node.y, node.diam, node.diam);
         showLabel(node);
       }
   }
@@ -108,6 +120,10 @@ class Diagram {
         node.nextX = node.getNextX(timeStep);
         node.nextY = node.getNextY(timeStep);
         node.nextVelocity = node.getNextVelocity(timeStep);
+        //if new x or y position is outside of the canvas, flip velocity
+        if(outBounds(node)){
+          outBoundsReset(node);
+        }
         //add in dampening
     }
     for(int i = 0; i < node_list.size(); i++){
@@ -118,9 +134,36 @@ class Diagram {
       node.velocity = node.nextVelocity;
     }
   }
+  
+boolean outBounds(Node node) {
+   if(node.nextX - (node.diam/2) < 0 || node.nextX + (node.diam/2) > width || 
+       node.nextY + (node.diam/2) > height || node.nextY - (node.diam/2) < 0){ 
+        return true;
+      }
+       return false;
+}
+
+void outBoundsReset(Node node) {
+    if(node.nextX < 0){
+      node.nextX = (node.diam/2);
+      node.nextVelocity.x = node.nextVelocity.x * -1;
+    } else if (node.nextX > width){
+      node.nextX = width - (node.diam/2);
+      node.nextVelocity.x = node.nextVelocity.x * -1;
+    } 
+    
+    if (node.nextY > height) {
+      node.nextY = height - (node.diam/2);
+      node.nextVelocity.y = node.nextVelocity.y * -1;
+    } else if (node.nextY < 0) {
+      node.nextY = (node.diam/2);
+      node.nextVelocity.y = node.nextVelocity.y * -1;
+    }  
+}
+
    
   boolean mouseHover(Node node) {
-    if(dist(mouseX, mouseY, node.x, node.y) <= (node.mass * 50)/2){
+    if(dist(mouseX, mouseY, node.x, node.y) <= (node.diam)/2){
          return true; 
     }
        return false;
@@ -138,6 +181,7 @@ class Diagram {
   color colorPicker(Node node) {
     if(mouseHover(node)){
             node_color = #cc7c7c; //pink
+            
         } else {
             node_color = #FFFFFF;
         }

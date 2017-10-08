@@ -6,7 +6,14 @@ void setup()
   String[] data = loadStrings("./data1.csv");
   diagram = createNodes(data);
   diagram.createEdges(data);
+}
 
+void mousePressed() {
+  diagram.mousePressed();
+}
+
+void mouseReleased() {
+  diagram.mouseReleased();
 }
 
 void draw()

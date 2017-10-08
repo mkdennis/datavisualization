@@ -1,6 +1,6 @@
 class Node{
   int id;
-  float mass, x, y, c; //c = coulomb's constant
+  float mass, x, y, c, diam, size; //c = coulomb's constant
   ArrayList<Edge> connected_nodes;
   PVector acceleration;
   PVector velocity;
@@ -49,5 +49,7 @@ float getNextY(float timeStep){
       acceleration = new PVector();
       nextX = x;
       nextY = y;
+      size = .0001;
+      diam = mass * size *(width * height);
   }
 }
