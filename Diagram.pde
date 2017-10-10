@@ -8,6 +8,38 @@ class Diagram {
   float hooke = 6;
   float dampening = 1.0; 
   float timeStep = .03;
+  
+  Node selectedNode = null;
+  float startX, startY;
+  float time = 0;
+  
+  float dampRatio = .9;
+  
+  
+  void mousePressed(){
+    selectedNode = null;
+    for(Node node : node_list){
+      if(mouseHover(node)){
+       selectedNode = node;
+       startX = selectedNode.x;
+       startY = selectedNode.y;
+       time = millis();
+       break;
+      }
+    }
+  }
+  
+  void mouseReleased(){
+    if(selectedNode != null){
+      float deltaX = selectedNode.x - startX;
+      float deltaY = selectedNode.y - startY;
+      float deltaT = millis() - time;
+      PVector velocity = new PVector(deltaX, deltaY);
+      selectedNode.nextVelocity = velocity.div(deltaT*1000*timeStep);
+      selectedNode = null;  
+    }
+  }
+  
       
   float getTotalEnergy(){
     float energy = 0;
@@ -91,8 +123,8 @@ class Diagram {
         strokeWeight(1);
         float distance = dist(start.x, start.y, end.x, end.y);
         if(distance < e.length){
-          float maxWeight = 50;
-          float pct = distance/e.length;
+          float maxWeight = 25;
+          float pct = (e.length-distance)/e.length;
           strokeWeight(maxWeight * pct);  
         }
         line(start.x, start.y, end.x, end.y); 
@@ -120,18 +152,31 @@ class Diagram {
         node.nextX = node.getNextX(timeStep);
         node.nextY = node.getNextY(timeStep);
         node.nextVelocity = node.getNextVelocity(timeStep);
+        node.nextVelocity = node.nextVelocity.mult(dampRatio);
         //if new x or y position is outside of the canvas, flip velocity
-        if(outBounds(node)){
-          outBoundsReset(node);
-        }
+        
         //add in dampening
+    }
+    if(selectedNode != null){
+      
+      selectedNode.acceleration = new PVector(0,0);
+      selectedNode.nextX = mouseX;
+      selectedNode.nextY = mouseY;
+      selectedNode.nextVelocity = new PVector(0,0);   
+      if(outBounds(selectedNode)){
+          outBoundsReset(selectedNode);
+      }
     }
     for(int i = 0; i < node_list.size(); i++){
       //actually update the positions
       Node node = node_list.get(i);
+      if(outBounds(node)){
+          outBoundsReset(node);
+      }
       node.x = node.nextX;
       node.y = node.nextY;
       node.velocity = node.nextVelocity;
+      node.velocity = node.nextVelocity.mult(dampRatio);
     }
   }
   
@@ -144,18 +189,18 @@ boolean outBounds(Node node) {
 }
 
 void outBoundsReset(Node node) {
-    if(node.nextX < 0){
+    if(node.nextX - node.diam/2 <= 0){
       node.nextX = (node.diam/2);
       node.nextVelocity.x = node.nextVelocity.x * -1;
-    } else if (node.nextX > width){
+    } else if (node.nextX + node.diam/2 > width){
       node.nextX = width - (node.diam/2);
       node.nextVelocity.x = node.nextVelocity.x * -1;
     } 
     
-    if (node.nextY > height) {
+    if (node.nextY + node.diam/2 >= height) {
       node.nextY = height - (node.diam/2);
       node.nextVelocity.y = node.nextVelocity.y * -1;
-    } else if (node.nextY < 0) {
+    } else if (node.nextY - node.diam/2 < 0) {
       node.nextY = (node.diam/2);
       node.nextVelocity.y = node.nextVelocity.y * -1;
     }  
