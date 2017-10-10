@@ -15,6 +15,9 @@ class Diagram {
   
   float dampRatio = .9;
   
+  Slider hookSlider;
+  Slider coulSlider;
+  
   
   void mousePressed(){
     selectedNode = null;
@@ -27,6 +30,8 @@ class Diagram {
        break;
       }
     }
+    hookSlider.mousePressed();
+    coulSlider.mousePressed();
   }
   
   void mouseReleased(){
@@ -38,6 +43,11 @@ class Diagram {
       selectedNode.nextVelocity = velocity.div(deltaT*1000*timeStep);
       selectedNode = null;  
     }
+    hookSlider.mouseReleased();
+    coulSlider.mouseReleased();
+    hooke = hookSlider.getCurrentVal();
+    coulomb = coulSlider.getCurrentVal();
+
   }
   
       
@@ -105,13 +115,9 @@ class Diagram {
   
   void drawSliders(){
     //slider for size, hook, coul, damp, time step
-    Slider sizeslider = new Slider(20, height-40);
-    Slider hookslider = new Slider(20, height-80);
-    Slider coulslider = new Slider(20, height-120);
-    
-    sizeslider.drawSlider();
-    hookslider.drawSlider();
-    coulslider.drawSlider();
+    //sizeslider.drawSlider();
+    hookSlider.drawSlider();
+    coulSlider.drawSlider();
   }
    
   void drawEdges(){
@@ -135,7 +141,7 @@ class Diagram {
    
   void drawNodes() {
       updateNodePositions();
-      for(int i = 0; i < node_list.size(); i++){   
+      for(int i = node_list.size()-1; i >= 0; i--){   
         Node node = node_list.get(i);
         fill(colorPicker(node));
         ellipse(node.x, node.y, node.diam, node.diam);
@@ -185,7 +191,7 @@ boolean outBounds(Node node) {
        node.nextY + (node.diam/2) > height || node.nextY - (node.diam/2) < 0){ 
         return true;
       }
-       return false;
+      return false;
 }
 
 void outBoundsReset(Node node) {
@@ -234,6 +240,9 @@ void outBoundsReset(Node node) {
   }
  
   void createEdges(String[] data){
+    //Slider sizeslider = new Slider(20, height-40);
+    hookSlider = new Slider(20, height-80, 1, 50, hooke);
+    coulSlider = new Slider(20, height-120, 1, 50, coulomb);
     int checkpoint = Integer.parseInt(data[0]) + 2;
     for(int j = checkpoint; j < data.length; j++) {
       String[] line = split(data[j], ","); 
