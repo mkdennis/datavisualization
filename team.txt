@@ -1,0 +1,11 @@
+COMP177 Assignment 2: 10/9/17
+Mary Matthews: built out most out of the node position/velocity functions, force functions, interactivity.
+Dennis Kim: Parsing, creating/drawing node/edge data structures, force functions, staying within canvas
+
+Extras:
+Spring Compression/Thickness: Correlated stroke weight of edge springs to compression/pulling (i.e. when length of spring became shorter than original length, edge looks thicker)
+
+Sliders: allows user to control the constants we use for the force calculations (Coulomb’s Law, Dampening Ratio, Hooke’s Law)
+
+Staying in bounds of canvas: nodes will never leave canvas and will bounce off when hitting a canvas side (velocity vector is reversed, x velocity when hitting the left/right side, y velocity when hitting the top/bottom side) 
+
