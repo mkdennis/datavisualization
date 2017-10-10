@@ -26,8 +26,6 @@ void draw()
 Diagram createNodes(String[] data){
     Diagram diagram = new Diagram();  
     int node_count = Integer.parseInt(data[0]);
-    int checkpoint = node_count + 2; //start of second half of data
-    
     for(int i = 1; i < node_count + 1; i++){
       String[] line = split(data[i], ",");
       int id = Integer.parseInt(line[0]);

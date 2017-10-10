@@ -5,9 +5,11 @@ class Slider {
   float currentPos;
   float xknobpos, newknobpos;
   float minval, maxval;
-  boolean over;
+  float diameter = 20;
+  String label;
   
-  Slider(float x, float y, float maxVal, float minVal, float startVal) {
+  
+  Slider(float x, float y, float maxVal, float minVal, float startVal, String label) {
     swidth = width / 5.0;
     sheight = height / 25.0;
     xpos = x;
@@ -15,16 +17,22 @@ class Slider {
     newknobpos = xknobpos;
     this.minval = minVal;
     this.maxval = maxVal;
-    currentPos = xpos + (maxVal-startVal)/(maxVal - minVal)/2.0;
+    float pct = (maxVal-startVal)/(maxVal - minVal);
+    currentPos = xpos + pct*swidth;
+    println("Current pos "+currentPos);
   }
   
   float getCurrentVal(){
-    return currentPos; 
+    float maxX = xpos + swidth;
+    float pct = (maxX - currentPos) / (swidth - diameter/2);
+    float currentVal = minval + pct * (maxval-minval);
+    println("The current value is "+currentVal);
+    return currentVal; 
   }
   
   boolean contains(){
-    if(xpos - swidth/2 <= mouseX && xpos + swidth/2 >= mouseX){
-      if(ypos - sheight/2 <= mouseY && ypos + sheight/2 >= mouseY){
+    if(xpos <= mouseX && xpos + swidth >= mouseX){
+      if(ypos <= mouseY && ypos + sheight >= mouseY){
         return true;  
       }
     }
@@ -37,12 +45,17 @@ class Slider {
     if(contains()){
       selected = true;  
     }
-    
   }
   
   void mouseReleased(){
     if(selected){
-      currentPos = mouseX;    
+      currentPos = mouseX;  
+      if(currentPos >= swidth){
+        currentPos = swidth - diameter/2;  
+      }
+      if(currentPos < xpos){
+        currentPos = xpos + diameter/2;  
+      }
     }
     selected = false;  
   }
@@ -54,8 +67,11 @@ class Slider {
       }else{
         fill(255);  
       }     
+      rectMode(CORNER);
       rect(xpos, ypos, swidth, sheight);
-      ellipse(currentPos, ypos + (sheight/2), 20, 20);
+      fill(255);
+      ellipseMode(CENTER);
+      ellipse(currentPos, ypos + (sheight/2), diameter, diameter);
   }
   
   

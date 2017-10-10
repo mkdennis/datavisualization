@@ -5,16 +5,15 @@ class Diagram {
   PVector coulombForce;
   
   float coulomb = 20;
-  float hooke = 6;
-  float dampening = 1.0; 
+  float hooke = 6; 
   float timeStep = .03;
+  float dampRatio = .9;
   
   Node selectedNode = null;
   float startX, startY;
   float time = 0;
   
-  float dampRatio = .9;
-  
+  Slider dampSlider;
   Slider hookSlider;
   Slider coulSlider;
   
@@ -30,6 +29,7 @@ class Diagram {
        break;
       }
     }
+    dampSlider.mousePressed();
     hookSlider.mousePressed();
     coulSlider.mousePressed();
   }
@@ -45,9 +45,10 @@ class Diagram {
     }
     hookSlider.mouseReleased();
     coulSlider.mouseReleased();
+    dampSlider.mouseReleased();
     hooke = hookSlider.getCurrentVal();
     coulomb = coulSlider.getCurrentVal();
-
+    dampRatio = dampSlider.getCurrentVal();
   }
   
       
@@ -118,6 +119,7 @@ class Diagram {
     //sizeslider.drawSlider();
     hookSlider.drawSlider();
     coulSlider.drawSlider();
+    dampSlider.drawSlider();
   }
    
   void drawEdges(){
@@ -241,8 +243,9 @@ void outBoundsReset(Node node) {
  
   void createEdges(String[] data){
     //Slider sizeslider = new Slider(20, height-40);
-    hookSlider = new Slider(20, height-80, 1, 50, hooke);
-    coulSlider = new Slider(20, height-120, 1, 50, coulomb);
+    hookSlider = new Slider(20, height-80, 1, 50, hooke, "Hooke's Constant");
+    coulSlider = new Slider(20, height-120, 1, 50, coulomb, "Coulomb's Constant");
+    dampSlider = new Slider(20, height-40, .5, 1, .9, "Dampening");
     int checkpoint = Integer.parseInt(data[0]) + 2;
     for(int j = checkpoint; j < data.length; j++) {
       String[] line = split(data[j], ","); 
