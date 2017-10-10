@@ -19,6 +19,7 @@ class Slider {
     this.maxval = maxVal;
     float pct = (maxVal-startVal)/(maxVal - minVal);
     currentPos = xpos + pct*swidth;
+    this.label = label;
     println("Current pos "+currentPos);
   }
   
@@ -72,6 +73,10 @@ class Slider {
       fill(255);
       ellipseMode(CENTER);
       ellipse(currentPos, ypos + (sheight/2), diameter, diameter);
+      textAlign(CENTER, TOP);
+      fill(0);
+      text(label, xpos + swidth/2, ypos + sheight);
+      
   }
   
   

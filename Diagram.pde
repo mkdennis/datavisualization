@@ -161,9 +161,6 @@ class Diagram {
         node.nextY = node.getNextY(timeStep);
         node.nextVelocity = node.getNextVelocity(timeStep);
         node.nextVelocity = node.nextVelocity.mult(dampRatio);
-        //if new x or y position is outside of the canvas, flip velocity
-        
-        //add in dampening
     }
     if(selectedNode != null){
       
@@ -176,7 +173,7 @@ class Diagram {
       }
     }
     for(int i = 0; i < node_list.size(); i++){
-      //actually update the positions
+      //actually update the positions and velocities
       Node node = node_list.get(i);
       if(outBounds(node)){
           outBoundsReset(node);
