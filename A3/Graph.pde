@@ -26,8 +26,7 @@ class Graph {
   
   
   void display(){
-      
-      
+     
       drawCanvas();
       drawAxis();
       drawLineGraph();
@@ -41,7 +40,7 @@ class Graph {
     for(int i = 0; i < dplist.size(); i++) {
       DataPoint dp = dplist.get(i);   
       dp.pointx = x_origin + (counter * xproportion);
-         dp.pointy = y_origin - (dp.temp * 3);
+         dp.pointy = y_origin - (dp.temp * yaxislength * .006);
          counter++;
      }
      strokeWeight(1);
@@ -70,9 +69,9 @@ class Graph {
      y_origin = height - 50;  
     
     strokeWeight(1);
-      fill(204, 102, 0);
+      fill(255);
       rect(0, 0, canvasw, height); //canvas
-      fill(102, 178, 255);
+      fill(117, 139, 151);
       rect(canvasw, 0, sidebarw, height); //sidebar
   }
   
