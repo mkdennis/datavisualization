@@ -2,6 +2,13 @@ class Graph {
    float canvasw, canvash, sidebarw; 
    float x_origin, y_origin, yaxislength, xaxislength;
    ArrayList<DataPoint> dplist = new ArrayList<DataPoint>();
+   int finalHeight;
+   Button linebutton;
+   Button barbutton;
+   Button piebutton;
+   
+   //side bar buttons
+   
    
    public Graph(){
      canvasw = width * .75;
@@ -29,45 +36,65 @@ class Graph {
      
       drawCanvas();
       drawAxis();
+      setupPoints();
       drawLineGraph();
   }
   
-  void drawLineGraph(){
+  void setupPoints(){
     //divide axis length by how many data points there are
     int xproportion = Math.round(xaxislength) / dplist.size(); 
     int counter = 1;
      //set pointx and pointy for each datapoint (only happens once)
     for(int i = 0; i < dplist.size(); i++) {
-      DataPoint dp = dplist.get(i);   
-      dp.pointx = x_origin + (counter * xproportion);
+         DataPoint dp = dplist.get(i);   
+         dp.pointx = x_origin + (counter * xproportion);
          dp.pointy = y_origin - (dp.temp * yaxislength * .006);
          counter++;
      }
+    
+  }
+  
+  void drawBarGraph(int j){
+    fill(22, 160, 133);
+    for(int i = 0; i < dplist.size() - 1; i++) {
+         DataPoint dp = dplist.get(i);
+         //keep drawing bar graph until height is too much
+         if(j < (y_origin - dp.pointy)){
+           rect(dp.pointx - 10, dp.pointy, 20, j);
+         }
+    }
+    
+  }
+  void drawLineGraph(){
+     //draw points
      strokeWeight(1);
      for(int i = 0; i < dplist.size(); i++) {
        DataPoint dp = dplist.get(i);
        ellipse(dp.pointx, dp.pointy, 5, 5);
      }
      
+     //draw connecting lines
      strokeWeight(.5);
      for(int i = 0; i < dplist.size() - 1; i++) {
        DataPoint dp = dplist.get(i);
        DataPoint nextdp = dplist.get(i+1);
 
        line(dp.pointx, dp.pointy, nextdp.pointx, nextdp.pointy);
-     }
-     
-     //run through arraylist and draw every point
-    
+     }    
   }
   
   void drawCanvas(){
+     
      canvasw = width * .75;
      canvash = height;
      sidebarw = width *.25;
      x_origin = 50;
      y_origin = height - 50;  
-    
+     
+     //create buttons
+     //draw buttons
+     
+     
     strokeWeight(1);
       fill(255);
       rect(0, 0, canvasw, height); //canvas

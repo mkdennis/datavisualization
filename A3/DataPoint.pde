@@ -6,6 +6,7 @@ class DataPoint {
   float pointx, pointy;
   
   //bar graph attributes
+  float barHeight;
 
   //pie graph attributes
   
