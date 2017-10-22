@@ -17,5 +17,5 @@ int j = 0;
 void draw(){
   graph.display();
   //include conditional, when j is greater than height of bar stop
-  graph.drawBarGraph(j++);
+  //graph.drawBarGraph(j++);
 }

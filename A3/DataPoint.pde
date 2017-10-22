@@ -6,9 +6,10 @@ class DataPoint {
   float pointx, pointy;
   
   //bar graph attributes
-  float barHeight;
+  float barheight;
 
   //pie graph attributes
+  float degree;
   
   public DataPoint(String t, float tmp){
     time = t;
