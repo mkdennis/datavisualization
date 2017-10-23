@@ -16,6 +16,8 @@ void setup(){
 int j = 1;
 int k = 0;
 int r = 0;
+int s = 0;
+int t = 0;
 
 void draw(){
     graph.display();
@@ -24,15 +26,24 @@ void draw(){
     if(state == 1){
        graph.drawLineGraph(true, 0);
        j = 1;
-    } else if(state == 2){
-      graph.drawLineGraph(false, j++);
+    } else if(state == 2){               //line to bar
+      graph.drawLineGraph(false, j++);   //triggers flattening dot animation
       if(graph.nomorelines) {
-        graph.drawBarGraph(k);
+        graph.drawBarGraph(k);           //draw bar bar graph downwards
         k += 3;
       }
-    } else if(state == 3){
-      graph.bartoPie(r);
-      r += 4;
+    } else if(state == 3){ 
+
+          if(graph.bp1){ //when bar resize is done, shrink width of bar to line         
+            println("called");
+            graph.bartoPie2(s++);         
+          } else if(graph.bp2){
+            graph.bartoPie3(t++);
+          }else {
+             graph.bartoPie(r); //shrink bars
+             r += 4; 
+          }
+          
     } else if(state == 4){
       graph.drawPieGraph();
       //pietoBar();

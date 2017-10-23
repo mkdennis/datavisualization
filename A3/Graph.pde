@@ -7,6 +7,8 @@ class Graph {
    float diameter;
    color col;
    boolean nomorelines;
+   boolean bp1;
+   boolean bp2;
    Button linebutton;
    Button barbutton;
    Button piebutton;
@@ -23,6 +25,9 @@ class Graph {
      diameter = 500;
      col = color(22, 160, 133);
      nomorelines = false;
+     bp1 = false;
+     bp2 = false;
+     
    }
    
   void display(){
@@ -46,19 +51,39 @@ class Graph {
       if((dp.barheight - r) > dp.barheight2){
         fill(col);
         rect(dp.pointx - 10, dp.pointy, 15, dp.barheight - r);
-      }else{
+      } else{
         fill(col); //change to random colors later
         rect(dp.pointx - 10, dp.pointy, 15, dp.barheight2);
+        bp1 = true;
       }
     }
-    
-    
-    
     
     //align bars?
     //curve bars
     //arrange bars into pie
     //fill in bars
+    
+  }
+  
+  void bartoPie2(int s){
+      float barwidth = 15 - (s * .3);
+      for(int i = 0; i < dplist.size(); i++) {
+        DataPoint dp = dplist.get(i);
+        if(barwidth > 0){
+          fill(col);
+          rect(dp.pointx - 10, dp.pointy, barwidth, dp.barheight2);
+        } else
+          line(dp.pointx - 10, dp.pointy, dp.pointx - 10, dp.pointy + dp.barheight2);
+          bp2 = true;
+      } 
+  }
+  
+  void bartoPie3(int t) {
+      //create arcs
+      for(int i = 0; i < dplist.size(); i++){
+         DataPoint dp = dplist.get(i); 
+         //arc(dp.pointx, dp.pointy + (barheight2/2), 40, 40,
+      }
     
   }
   
