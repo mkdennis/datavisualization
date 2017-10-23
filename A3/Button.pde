@@ -10,7 +10,7 @@ class Button {
      posY = b;
      w = c;
      h = d;
-     col = #9b59b6;
+     col = #CDA2AB;
      label = f;
      Over = false;
   }
@@ -20,9 +20,9 @@ class Button {
     fill(col);
     rect(posX, posY, w, h);
     
-    fill(50);
+    fill(255);
     textSize(20);
-    text(label, posX + 50, posY + 45);
+    text(label, posX + 55, posY + 45);
   }
   
   boolean overRect() {

@@ -20,8 +20,8 @@ class Graph {
      sidebarw = width *.25;
      x_origin = 50;
      y_origin = height - 50;
-     diameter = 300;
-     col = #317c4f;
+     diameter = 500;
+     col = color(22, 160, 133);
      nomorelines = false;
    }
    
@@ -34,18 +34,39 @@ class Graph {
       //bartoPie();
   }
  
-  void bartoPie(){
+  void bartoPie(int r){
     for(int i = 0; i < dplist.size(); i++){
         DataPoint dp = dplist.get(i);
-        dp.barheight = 2 * PI * (diameter/2) * (dp.degree / 360);
-    }
+        dp.barheight2 = 2 * PI * (diameter/2) * (dp.degree / 360);
+    } //make sure to reset when you go from pie to bar
+    
     
     for(int i = 0; i < dplist.size(); i++) {
       DataPoint dp = dplist.get(i);  
-      rect(dp.pointx - 10, dp.pointy, 20, dp.barheight);
+      if((dp.barheight - r) > dp.barheight2){
+        fill(col);
+        rect(dp.pointx - 10, dp.pointy, 15, dp.barheight - r);
+      }else{
+        fill(col); //change to random colors later
+        rect(dp.pointx - 10, dp.pointy, 15, dp.barheight2);
+      }
     }
     
+    
+    
+    
+    //align bars?
+    //curve bars
+    //arrange bars into pie
+    //fill in bars
+    
   }
+  
+  void pietoBar(){
+    setupPoints(); //resets bar heights
+    
+  }
+  
   void setupPoints(){
     //divide axis length by how many data points there are
     int xproportion = Math.round(xaxislength) / dplist.size(); 
@@ -71,23 +92,29 @@ class Graph {
     
     float lastAngle = 0;
     fill(col);
+    
     for(int i = 0; i < dplist.size(); i++) {
       DataPoint dp = dplist.get(i);
       arc(canvasw/2, canvash/2, 300, 300, lastAngle, lastAngle+radians(dp.degree));
       lastAngle += radians(dp.degree);
     }
     
+    
+    DataPoint dp = dplist.get(0);
+    fill(#474973);
+    arc(canvasw/2, canvash/2 - 200, 300, 300, 0, radians(dp.degree));
+    
   }
   
   void drawBarGraph(int k){
-    fill(22, 160, 133);
+    fill(col);
     for(int i = 0; i < dplist.size(); i++) {
          DataPoint dp = dplist.get(i);
          //keep drawing bar graph until height is too much
          if(k < dp.barheight)
-          rect(dp.pointx - 10, dp.pointy, 20, k);
+          rect(dp.pointx - 10, dp.pointy, 15, k);
          else 
-           rect(dp.pointx - 10, dp.pointy, 20, dp.barheight);
+           rect(dp.pointx - 10, dp.pointy, 15, dp.barheight);
     }
   }
   
@@ -117,7 +144,6 @@ class Graph {
          fill(col);
          ewidth += (j * 002);
          eheight -= (j *.5);
-         println("eheight: " + eheight);
          if(eheight > .05 || ewidth < 9){
            for(int i = 0; i < dplist.size(); i++) {
              DataPoint dp = dplist.get(i);
@@ -151,7 +177,7 @@ class Graph {
      //create buttons
      //draw buttons
      
-     fill(117, 139, 151);
+     fill(#474973);
      rect(canvasw, 0, sidebarw, height); //sidebar
      
      linebutton.display();
@@ -202,9 +228,9 @@ class Graph {
       dplist.add(datapoint);
     }
     
-    linebutton = new Button((int) canvasw + 40, 50, (int)(sidebarw * .70), 75, "Line Graph");
-    barbutton = new Button((int) canvasw + 40, 200, (int)(sidebarw * .70), 75, "Bar Graph");
-    piebutton = new Button((int) canvasw + 40, 350, (int)(sidebarw * .70), 75, "Pie Graph");
+    linebutton = new Button((int) canvasw + 40, 100, (int)(sidebarw * .70), 75, "Line Graph");
+    barbutton = new Button((int) canvasw + 40, 250, (int)(sidebarw * .70), 75, "Bar Graph");
+    piebutton = new Button((int) canvasw + 40, 400, (int)(sidebarw * .70), 75, "Pie Graph");
     /*
     for(int i = 0; i < dplist.size(); i++) {
       println("Time: " + dplist.get(i).time + " Temp: " + dplist.get(i).temp);
