@@ -18,12 +18,18 @@ class Button {
   void display(){
     strokeWeight(0);
     fill(col);
-    println("posX: " + posX + "posY: " + posY);
     rect(posX, posY, w, h);
     
     fill(50);
     textSize(20);
     text(label, posX + 50, posY + 45);
-
   }
+  
+  boolean overRect() {
+     if(mouseX >= posX && mouseX <= posX + w && mouseY >= posY && mouseY <= posY+h){
+        return true; 
+     } else
+       return false;
+  }
+  
 }
