@@ -9,6 +9,7 @@ class Graph {
    boolean nomorelines;
    boolean bp1;
    boolean bp2;
+   boolean bp3;
    Button linebutton;
    Button barbutton;
    Button piebutton;
@@ -22,11 +23,12 @@ class Graph {
      sidebarw = width *.25;
      x_origin = 50;
      y_origin = height - 50;
-     diameter = 500;
+     diameter = 300;
      col = color(22, 160, 133);
      nomorelines = false;
      bp1 = false;
      bp2 = false;
+     bp3 = false;
      
    }
    
@@ -72,19 +74,39 @@ class Graph {
         if(barwidth > 0){
           fill(col);
           rect(dp.pointx - 10, dp.pointy, barwidth, dp.barheight2);
-        } else
+        } else{
           line(dp.pointx - 10, dp.pointy, dp.pointx - 10, dp.pointy + dp.barheight2);
           bp2 = true;
+        }
       } 
   }
   
   void bartoPie3(int t) {
-      //create arcs
+      //create slices
+      fill(col);
       for(int i = 0; i < dplist.size(); i++){
-         DataPoint dp = dplist.get(i); 
+         DataPoint dp = dplist.get(i);
+         dp.slicex = dp.pointx + t;
+         dp.slicey = (dp.pointy + dp.pointy + dp.barheight2)/2;
+         if((dp.pointx + t) < (dp.pointx + diameter/2))
+           triangle(dp.pointx, dp.pointy, dp.pointx, dp.pointy + dp.barheight2, dp.slicex, dp.slicey);
+         else{
+           triangle(dp.pointx, dp.pointy, dp.pointx, dp.pointy + dp.barheight2, dp.pointx + (diameter/2), (dp.pointy + dp.pointy + dp.barheight2)/2);
+           bp3 = true;
+         }
          //arc(dp.pointx, dp.pointy + (barheight2/2), 40, 40,
       }
-    
+      
+  }
+  
+  void bartoPie4(int p) {
+    DataPoint dp = dplist.get(0);
+    fill(col);
+    if(dp.pointx + (diameter/2) < 900){
+      translate(p, 0);
+      triangle(dp.pointx, dp.pointy, dp.pointx, dp.pointy + dp.barheight2, dp.pointx + (diameter/2), (dp.pointy + dp.pointy + dp.barheight2)/2);
+    }
+  
   }
   
   void pietoBar(){

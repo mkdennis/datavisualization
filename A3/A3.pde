@@ -18,11 +18,11 @@ int k = 0;
 int r = 0;
 int s = 0;
 int t = 0;
+int p = 0;
 
 void draw(){
     graph.display();
-    graph.drawPieGraph();
-    
+    //graph.drawPieGraph();
     if(state == 1){
        graph.drawLineGraph(true, 0);
        j = 1;
@@ -33,13 +33,15 @@ void draw(){
         k += 3;
       }
     } else if(state == 3){ 
-
-          if(graph.bp1){ //when bar resize is done, shrink width of bar to line         
-            println("called");
-            graph.bartoPie2(s++);         
-          } else if(graph.bp2){
+          if(graph.bp3){
+             graph.bartoPie4(p++);
+          }
+          else if(graph.bp2){
             graph.bartoPie3(t++);
-          }else {
+          }
+          else if(graph.bp1){ //when bar resize is done, shrink width of bar to line         
+            graph.bartoPie2(s++);         
+          } else {
              graph.bartoPie(r); //shrink bars
              r += 4; 
           }
@@ -55,6 +57,14 @@ void draw(){
 }
 
 int state = 1;
+
+void resetTimer(){
+    j = 1;
+    k = 0;
+    r = 0;
+    s = 0;
+    t = 0;
+}
 
 void mousePressed(){
      if(graph.linebutton.overRect()){
