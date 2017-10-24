@@ -10,6 +10,7 @@ class Graph {
    boolean bp1;
    boolean bp2;
    boolean bp3;
+   boolean bp4;
    Button linebutton;
    Button barbutton;
    Button piebutton;
@@ -29,6 +30,7 @@ class Graph {
      bp1 = false;
      bp2 = false;
      bp3 = false;
+     bp4 = false;
      
    }
    
@@ -68,6 +70,21 @@ class Graph {
   }
   
   void bartoPie2(int s){
+      //shorten bar graph width
+      fill(col);
+      
+      for(int i = 0; i < dplist.size(); i++){
+          DataPoint dp = dplist.get(i);
+          if(s < 90){
+            translate(canvasw/2, canvash/2);
+            rotate(radians(s));
+            rect(dp.pointx - 10, dp.pointy, 15, dp.barheight2);
+          } else
+          rect(dp.pointx - 10, dp.pointy, 15, dp.barheight2);
+
+      }
+      
+      /*
       float barwidth = 15 - (s * .3);
       for(int i = 0; i < dplist.size(); i++) {
         DataPoint dp = dplist.get(i);
@@ -79,6 +96,7 @@ class Graph {
           bp2 = true;
         }
       } 
+      */
   }
   
   void bartoPie3(int t) {
