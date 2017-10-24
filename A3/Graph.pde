@@ -76,7 +76,7 @@ class Graph {
       for(int i = 0; i < dplist.size(); i++){
           DataPoint dp = dplist.get(i);
           if(s < 90){
-            translate(canvasw/2, canvash/2);
+            translate(dp.pointx + 5, dp.pointy + (dp.barheight2/2));
             rotate(radians(s));
             rect(dp.pointx - 10, dp.pointy, 15, dp.barheight2);
           } else
