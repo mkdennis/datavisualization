@@ -5,7 +5,7 @@ Graph graph;
 void setup(){
   size(1200, 600);
   background(255);
-  frameRate(40);
+  frameRate(100);
   smooth();
   surface.setResizable(true);
   String[] lines = loadStrings("./data.csv");
@@ -21,6 +21,7 @@ int t = 0;
 int p = 0;
 float q = 0;
 int z = 0;
+int u = 0;
 
 void draw(){
     graph.display();
@@ -57,11 +58,11 @@ void draw(){
           }
           
     } else if(state == 4){
-      graph.drawPieGraph();
+      graph.drawBarGraph(k);
+      k += 3;
       //pietoBar();
     } else if(state == 5){
-      //bartoLine();
-      state = 1;
+      graph.bartoLine(u++);
     }
     
 }
@@ -77,7 +78,9 @@ void resetTimer(){
 }
 
 void mousePressed(){
-     if(graph.linebutton.overRect()){
+    if (graph.linebutton.overRect() && state == 4){
+        state = 5; // bar to line 
+     } else if(graph.linebutton.overRect()){
          state = 1; //start
      } else if(graph.barbutton.overRect() && state == 1){
         state = 2; //line to bar
@@ -85,9 +88,9 @@ void mousePressed(){
         state = 3; //bar to pie
      } else if(graph.barbutton.overRect() && state == 3){
         state = 4; //pie to bar
-     } else if (graph.linebutton.overRect() && state == 4){
-        state = 5; // bar to line 
+        k = 0;
      }
+     
      
     println("state: " + state);
 }

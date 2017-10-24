@@ -45,6 +45,27 @@ class Graph {
       //drawLineGraph();
       //bartoPie();
   }
+   
+  void bartoLine(int u){
+    for(int i = 0; i < dplist.size(); i++) {
+      DataPoint dp = dplist.get(i);  
+      if((dp.barheight - u) > 1){
+        fill(col);
+        rect(dp.pointx - 10, dp.pointy, 15, dp.barheight - u);
+      } else{
+        fill(col); //change to random colors later
+        ellipse(dp.pointx + 5, dp.pointy, 5, 5);
+        if(i < 23){
+          println(i);
+          DataPoint dpnext = dplist.get(i + 1);
+          line(dp.pointx + 5, dp.pointy, dpnext.pointx+u, dp.pointy);
+        }
+      }
+    }
+    
+    
+  }
+ 
  
   void bartoPie(int r){
     for(int i = 0; i < dplist.size(); i++){
@@ -123,6 +144,16 @@ class Graph {
     }
   }
   
+  void setRandomColors(){
+    for(int i = 0; i < dplist.size(); i++){
+      DataPoint dp = dplist.get(i);
+      dp.r = int(random(0, 255));
+      dp.g = int(random(0, 255));
+      dp.b = int(random(0, 255));
+    }
+     
+  }
+  
   //rotations
   void bartoPie5(float q){
     fill(col);
@@ -149,13 +180,14 @@ class Graph {
              dp.slicey += q;
           }
       }
-      println("dp.slicex: " + dplist.get(0).slicex + "canvasw/2: " + canvasw/2);
+      //println("dp.slicex: " + dplist.get(0).slicex + "canvasw/2: " + canvasw/2);
+      //should be once all slices are done moving, then start next animation
       if(dp.slicey > canvash/2 - .02 && dp.slicey < canvash/2 + .02){
         if(dp.slicex > canvasw/2 - .02 && dp.slicex < canvasw/2 + .02){
           bp5 = true;
       }
       }
-      
+      fill(dp.r, dp.g, dp.b);
       arc(dp.slicex, dp.slicey, diameter, diameter, PI - arcstart, PI - arcstart + radians(dp.degree));
     }
    
@@ -343,6 +375,7 @@ class Graph {
       dplist.add(datapoint);
     }
     
+    setRandomColors();
     linebutton = new Button((int) canvasw + 40, 100, (int)(sidebarw * .70), 75, "Line Graph");
     barbutton = new Button((int) canvasw + 40, 250, (int)(sidebarw * .70), 75, "Bar Graph");
     piebutton = new Button((int) canvasw + 40, 400, (int)(sidebarw * .70), 75, "Pie Graph");
