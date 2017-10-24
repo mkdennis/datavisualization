@@ -5,6 +5,7 @@ class Graph {
    int finalHeight;
    int numrows;
    float diameter;
+   float arcstart;
    color col;
    boolean nomorelines;
    boolean bp1;
@@ -24,7 +25,7 @@ class Graph {
      sidebarw = width *.25;
      x_origin = 50;
      y_origin = height - 50;
-     diameter = 300;
+     diameter = 200;
      col = color(22, 160, 133);
      nomorelines = false;
      bp1 = false;
@@ -72,19 +73,6 @@ class Graph {
   void bartoPie2(int s){
       //shorten bar graph width
       fill(col);
-      
-      for(int i = 0; i < dplist.size(); i++){
-          DataPoint dp = dplist.get(i);
-          if(s < 90){
-            translate(dp.pointx + 5, dp.pointy + (dp.barheight2/2));
-            rotate(radians(s));
-            rect(dp.pointx - 10, dp.pointy, 15, dp.barheight2);
-          } else
-          rect(dp.pointx - 10, dp.pointy, 15, dp.barheight2);
-
-      }
-      
-      /*
       float barwidth = 15 - (s * .3);
       for(int i = 0; i < dplist.size(); i++) {
         DataPoint dp = dplist.get(i);
@@ -96,7 +84,7 @@ class Graph {
           bp2 = true;
         }
       } 
-      */
+      
   }
   
   void bartoPie3(int t) {
@@ -118,13 +106,42 @@ class Graph {
   }
   
   void bartoPie4(int p) {
-    DataPoint dp = dplist.get(0);
     fill(col);
-    if(dp.pointx + (diameter/2) < 900){
-      translate(p, 0);
+    for(int i = 0; i < dplist.size(); i++){
+      DataPoint dp = dplist.get(i);
+      arcstart = atan( (dp.barheight2 / 2)/ (diameter/2) );
       triangle(dp.pointx, dp.pointy, dp.pointx, dp.pointy + dp.barheight2, dp.pointx + (diameter/2), (dp.pointy + dp.pointy + dp.barheight2)/2);
+      if(p < diameter)
+        arc(dp.slicex, dp.slicey, p, p, PI - arcstart, PI - arcstart + radians(dp.degree));
+      else{ 
+        arc(dp.slicex, dp.slicey, diameter, diameter, PI - arcstart, PI - arcstart + radians(dp.degree));
+        bp4 = true;
+      }
+
     }
+  }
   
+  void bartoPie5(int q){
+    fill(col);
+    for(int i = 0; i < dplist.size(); i++){
+    
+      DataPoint dp = dplist.get(i);
+      if(dp.slicex < canvasw / 2){
+          if(dp.slicex + q < canvasw / 2){
+            dp.slicex += q;
+            arc(dp.slicex, dp.slicey, diameter, diameter, PI - arcstart, PI - arcstart + radians(dp.degree));
+          } else 
+            arc(dp.slicex, dp.slicey, diameter, diameter, PI - arcstart, PI - arcstart + radians(dp.degree));
+      } else {
+        if(dp.slicex - q > canvasw / 2){
+           dp.slicex -= q;
+           arc(dp.slicex, dp.slicey, diameter, diameter, PI - arcstart, PI - arcstart + radians(dp.degree));
+        } else
+           arc(dp.slicex, dp.slicey, diameter, diameter, PI - arcstart, PI - arcstart + radians(dp.degree));
+      }
+    }
+      
+    
   }
   
   void pietoBar(){
@@ -306,5 +323,4 @@ class Graph {
 
 
 
-
-}
+ }

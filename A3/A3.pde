@@ -19,6 +19,7 @@ int r = 0;
 int s = 0;
 int t = 0;
 int p = 0;
+int q = 0;
 
 void draw(){
     graph.display();
@@ -33,8 +34,13 @@ void draw(){
         k += 3;
       }
     } else if(state == 3){ 
-          if(graph.bp3){
-             graph.bartoPie4(p++);
+          if(graph.bp4){
+             graph.bartoPie5(q); 
+             q += 1;
+          }
+          else if(graph.bp3){
+             graph.bartoPie4(p);
+             p+=3;
           }
           else if(graph.bp2){
             graph.bartoPie3(t++);

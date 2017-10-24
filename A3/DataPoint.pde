@@ -10,7 +10,7 @@ class DataPoint {
 
   //pie graph attributes
   float degree;
-  float slicex, slicey;s
+  float slicex, slicey;
   
   public DataPoint(String t, float tmp){
     time = t;
