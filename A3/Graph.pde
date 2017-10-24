@@ -12,6 +12,7 @@ class Graph {
    boolean bp2;
    boolean bp3;
    boolean bp4;
+   boolean bp5;
    Button linebutton;
    Button barbutton;
    Button piebutton;
@@ -32,6 +33,7 @@ class Graph {
      bp2 = false;
      bp3 = false;
      bp4 = false;
+     bp5 = false;
      
    }
    
@@ -121,7 +123,8 @@ class Graph {
     }
   }
   
-  void bartoPie5(int q){
+  //rotations
+  void bartoPie5(float q){
     fill(col);
     for(int i = 0; i < dplist.size(); i++){
     
@@ -129,20 +132,50 @@ class Graph {
       if(dp.slicex < canvasw / 2){
           if(dp.slicex + q < canvasw / 2){
             dp.slicex += q;
-            arc(dp.slicex, dp.slicey, diameter, diameter, PI - arcstart, PI - arcstart + radians(dp.degree));
-          } else 
-            arc(dp.slicex, dp.slicey, diameter, diameter, PI - arcstart, PI - arcstart + radians(dp.degree));
-      } else {
+          }
+      } else if(dp.slicex > canvasw / 2){
         if(dp.slicex - q > canvasw / 2){
            dp.slicex -= q;
-           arc(dp.slicex, dp.slicey, diameter, diameter, PI - arcstart, PI - arcstart + radians(dp.degree));
-        } else
-           arc(dp.slicex, dp.slicey, diameter, diameter, PI - arcstart, PI - arcstart + radians(dp.degree));
+        }
       }
-    }
       
+     
+      if(dp.slicey > canvash/2){
+          if(dp.slicey - q > canvash / 2){
+            dp.slicey -= q;
+          } 
+      } else if(dp.slicey < canvash/2) {
+          if(dp.slicey + q < canvash/2) {
+             dp.slicey += q;
+          }
+      }
+      println("dp.slicex: " + dplist.get(0).slicex + "canvasw/2: " + canvasw/2);
+      if(dp.slicey > canvash/2 - .02 && dp.slicey < canvash/2 + .02){
+        if(dp.slicex > canvasw/2 - .02 && dp.slicex < canvasw/2 + .02){
+          bp5 = true;
+      }
+      }
+      
+      arc(dp.slicex, dp.slicey, diameter, diameter, PI - arcstart, PI - arcstart + radians(dp.degree));
+    }
+   
+  }
+  
+  void bartoPie6(int z){
+      println("we made it");
+      DataPoint dp = dplist.get(0);  
+      arc(dp.slicex, dp.slicey, diameter, diameter, PI - arcstart, PI - arcstart + radians(dp.degree));
+    
+    /*
+    rotate each arc until in correct position (how to determine this?)
+    for(int i = 0; i < dplist.size(); i++){
+      DataPoint dp = dplist.get(i);  
+      arc(dp.slicex, dp.slicey, diameter, diameter, PI - arcstart, PI - arcstart + radians(dp.degree));
+    }
+    */
     
   }
+  
   
   void pietoBar(){
     setupPoints(); //resets bar heights
