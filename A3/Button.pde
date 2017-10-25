@@ -1,11 +1,11 @@
 class Button {
   int posX, posY;
-  int w, h;
+  float w, h;
   color col;
   boolean Over;
   String label;
   
-  public Button(int a, int b, int c, int d, String f){
+  public Button(int a, int b, float c, int d, String f){
      posX = a;
      posY = b;
      w = c;

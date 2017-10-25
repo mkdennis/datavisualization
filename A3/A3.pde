@@ -3,7 +3,7 @@ Graph graph;
 
 
 void setup(){
-  size(1200, 600);
+  size(1300, 600);
   background(255);
   frameRate(100);
   smooth();
@@ -22,6 +22,8 @@ int p = 0;
 float q = 0;
 int z = 0;
 int u = 0;
+int a = 0;
+float g = 0;
 
 void draw(){
     graph.display();
@@ -45,7 +47,7 @@ void draw(){
           }
           else if(graph.bp3){
              graph.bartoPie4(p);
-             p+=3;
+             p+=4;
           }
           else if(graph.bp2){
             graph.bartoPie3(t++);
@@ -58,8 +60,12 @@ void draw(){
           }
           
     } else if(state == 4){
-      graph.drawBarGraph(k);
-      k += 3;
+      if(graph.pb1){
+          graph.pietoBar2(a++);
+      } else {
+        graph.pietoBar(g);
+        g += .01;
+      }
       //pietoBar();
     } else if(state == 5){
       graph.bartoLine(u++);
@@ -75,13 +81,22 @@ void resetTimer(){
     r = 0;
     s = 0;
     t = 0;
+    p = 0;
+    q = 0;
+    z = 0;
+    u = 0;
+    a = 0;
+    g = 0;
+    graph.resetbools();
 }
 
 void mousePressed(){
+  
     if (graph.linebutton.overRect() && state == 4){
         state = 5; // bar to line 
-     } else if(graph.linebutton.overRect()){
-         state = 1; //start
+     } else if(graph.barbutton.overRect() && state == 5){
+         resetTimer();
+         state = 2;
      } else if(graph.barbutton.overRect() && state == 1){
         state = 2; //line to bar
      } else if(graph.piebutton.overRect() && state == 2){

@@ -5,7 +5,6 @@ class Graph {
    int finalHeight;
    int numrows;
    float diameter;
-   float arcstart;
    color col;
    boolean nomorelines;
    boolean bp1;
@@ -13,6 +12,7 @@ class Graph {
    boolean bp3;
    boolean bp4;
    boolean bp5;
+   boolean pb1;
    Button linebutton;
    Button barbutton;
    Button piebutton;
@@ -23,10 +23,10 @@ class Graph {
    public Graph(){
      canvasw = width * .75;
      canvash = height;
-     sidebarw = width *.25;
+     sidebarw = width * 25;
      x_origin = 50;
      y_origin = height - 50;
-     diameter = 200;
+     diameter = 300;
      col = color(22, 160, 133);
      nomorelines = false;
      bp1 = false;
@@ -34,6 +34,7 @@ class Graph {
      bp3 = false;
      bp4 = false;
      bp5 = false;
+     pb1 = false;
      
    }
    
@@ -44,6 +45,17 @@ class Graph {
       //drawPieGraph();
       //drawLineGraph();
       //bartoPie();
+  }
+  
+  void resetbools(){
+       nomorelines = false;
+
+      bp1 = false;
+     bp2 = false;
+     bp3 = false;
+     bp4 = false;
+     bp5 = false;
+     pb1 = false;
   }
    
   void bartoLine(int u){
@@ -56,7 +68,6 @@ class Graph {
         fill(col); //change to random colors later
         ellipse(dp.pointx + 5, dp.pointy, 5, 5);
         if(i < 23){
-          println(i);
           DataPoint dpnext = dplist.get(i + 1);
           line(dp.pointx + 5, dp.pointy, dpnext.pointx+u, dp.pointy);
         }
@@ -66,7 +77,7 @@ class Graph {
     
   }
  
- 
+ //decrease height of bars
   void bartoPie(int r){
     for(int i = 0; i < dplist.size(); i++){
         DataPoint dp = dplist.get(i);
@@ -85,16 +96,10 @@ class Graph {
         bp1 = true;
       }
     }
-    
-    //align bars?
-    //curve bars
-    //arrange bars into pie
-    //fill in bars
-    
   }
   
+  //shorten bar width (maybe change to draw rectangle on side of rectangle?)
   void bartoPie2(int s){
-      //shorten bar graph width
       fill(col);
       float barwidth = 15 - (s * .3);
       for(int i = 0; i < dplist.size(); i++) {
@@ -103,6 +108,7 @@ class Graph {
           fill(col);
           rect(dp.pointx - 10, dp.pointy, barwidth, dp.barheight2);
         } else{
+          strokeWeight(3);
           line(dp.pointx - 10, dp.pointy, dp.pointx - 10, dp.pointy + dp.barheight2);
           bp2 = true;
         }
@@ -110,8 +116,8 @@ class Graph {
       
   }
   
+ //draw triangle slices
   void bartoPie3(int t) {
-      //create slices
       fill(col);
       for(int i = 0; i < dplist.size(); i++){
          DataPoint dp = dplist.get(i);
@@ -128,16 +134,17 @@ class Graph {
       
   }
   
+  //draw arcs
   void bartoPie4(int p) {
     fill(col);
     for(int i = 0; i < dplist.size(); i++){
       DataPoint dp = dplist.get(i);
-      arcstart = atan( (dp.barheight2 / 2)/ (diameter/2) );
+      dp.arcstart = atan( (dp.barheight2 / 2)/ (diameter/2) );
       triangle(dp.pointx, dp.pointy, dp.pointx, dp.pointy + dp.barheight2, dp.pointx + (diameter/2), (dp.pointy + dp.pointy + dp.barheight2)/2);
       if(p < diameter)
-        arc(dp.slicex, dp.slicey, p, p, PI - arcstart, PI - arcstart + radians(dp.degree));
+        arc(dp.slicex, dp.slicey, p, p, PI - dp.arcstart, PI - dp.arcstart + radians(dp.degree));
       else{ 
-        arc(dp.slicex, dp.slicey, diameter, diameter, PI - arcstart, PI - arcstart + radians(dp.degree));
+        arc(dp.slicex, dp.slicey, diameter, diameter, PI - dp.arcstart, PI - dp.arcstart + radians(dp.degree));
         bp4 = true;
       }
 
@@ -154,12 +161,22 @@ class Graph {
      
   }
   
-  //rotations
+  //move slices to center
   void bartoPie5(float q){
-    fill(col);
     for(int i = 0; i < dplist.size(); i++){
     
       DataPoint dp = dplist.get(i);
+      if(dp.slicey > canvash/2 - 3 && dp.slicey < canvash/2 + 3){
+        if(dp.slicex > canvasw/2 - 3 && dp.slicex < canvasw/2 + 3){
+          if(i == dplist.size() - 1){
+              bp5 = true;
+          }
+          fill(dp.r, dp.g, dp.b);
+          arc(dp.slicex, dp.slicey, diameter, diameter, PI - dp.arcstart, PI - dp.arcstart + radians(dp.degree));
+          continue;
+        }
+      }
+      
       if(dp.slicex < canvasw / 2){
           if(dp.slicex + q < canvasw / 2){
             dp.slicex += q;
@@ -180,24 +197,37 @@ class Graph {
              dp.slicey += q;
           }
       }
-      //println("dp.slicex: " + dplist.get(0).slicex + "canvasw/2: " + canvasw/2);
-      //should be once all slices are done moving, then start next animation
-      if(dp.slicey > canvash/2 - .02 && dp.slicey < canvash/2 + .02){
-        if(dp.slicex > canvasw/2 - .02 && dp.slicex < canvasw/2 + .02){
-          bp5 = true;
-      }
-      }
+            
       fill(dp.r, dp.g, dp.b);
-      arc(dp.slicex, dp.slicey, diameter, diameter, PI - arcstart, PI - arcstart + radians(dp.degree));
+      arc(dp.slicex, dp.slicey, diameter, diameter, PI - dp.arcstart, PI - dp.arcstart + radians(dp.degree));
     }
    
   }
   
   void bartoPie6(int z){
-      println("we made it");
-      DataPoint dp = dplist.get(0);  
-      arc(dp.slicex, dp.slicey, diameter, diameter, PI - arcstart, PI - arcstart + radians(dp.degree));
+    float lastAngle = radians(270);  
     
+    for(int i = 0; i < dplist.size(); i++){
+        DataPoint dp = dplist.get(i);
+        dp.slicex = canvasw/2;
+        dp.slicey = canvash/2;
+        fill(dp.r, dp.g, dp.b);
+        float startangle = (PI - dp.arcstart) + radians(z);
+        float endangle = PI - dp.arcstart + radians(dp.degree) + radians(z);
+        if(startangle < lastAngle)
+          arc(dp.slicex, dp.slicey, diameter, diameter, startangle, endangle);
+        else{
+          arc(dp.slicex, dp.slicey, diameter, diameter, lastAngle, lastAngle + radians(dp.degree));
+          dp.start = lastAngle;
+          lastAngle += radians(dp.degree);
+          dp.end = lastAngle;
+        }
+
+        
+        //move slice to base position (startangle = radians(270);
+        //increase start angle and end angle until in correct position 
+    }
+      
     /*
     rotate each arc until in correct position (how to determine this?)
     for(int i = 0; i < dplist.size(); i++){
@@ -209,9 +239,76 @@ class Graph {
   }
   
   
-  void pietoBar(){
-    setupPoints(); //resets bar heights
+  void pietoBar(float q){
+    //resets bar heights
+    for(int i = 0; i < dplist.size(); i++){
+      DataPoint dp = dplist.get(i);
+      
+      if(dp.slicey > dp.pointy - 20 && dp.slicey < dp.pointy + 20){
+        if(dp.slicex > dp.pointx - 20 && dp.slicex < dp.pointx + 20){
+          if(i == dplist.size() - 1){
+              pb1 = true;
+              println("pb1 = true");
+          }
+          fill(dp.r, dp.g, dp.b);
+          arc(dp.slicex, dp.slicey, diameter, diameter, dp.start, dp.end);
+          continue;
+        }
+      }
+      println("dp.slicey: " + dp.slicey + " dp.pointy: " + dp.pointy + "dp.slicex: " + dp.slicex + " dp.pointx: " + dp.pointx);
+      
+      if(dp.pointx > dp.slicex){
+          if(dp.slicex + q < dp.pointx){
+            dp.slicex += q;
+          }
+      } else if(dp.pointx < dp.slicex){
+        if(dp.slicex - q > dp.pointx){
+           dp.slicex -= q;
+        }
+      }
+      
+      if(dp.pointy < dp.slicey){
+          if(dp.slicey - q > dp.pointy){
+            dp.slicey -= q;
+          } 
+      } else if(dp.pointy > dp.slicey) {
+          if(dp.slicey + q < dp.pointy) {
+             dp.slicey += q;
+          }
+      }
+            
+      fill(dp.r, dp.g, dp.b);
+      arc(dp.slicex, dp.slicey, diameter, diameter, dp.start, dp.end);
+    }
     
+  }
+  
+  void pietoBar2(int q){
+    
+    for(int i = 0; i < dplist.size(); i++){
+      DataPoint dp = dplist.get(i);
+      fill(col);
+      arc(dp.slicex, dp.slicey, diameter - q, diameter - q, dp.start, dp.end);
+      drawBarGraph(q);
+    }
+    
+    
+    /*
+    for(int i = 0; i < dplist.size(); i++){
+      DataPoint dp = dplist.get(i);
+      if(dp.end < radians(180)){
+        dp.end += radians(q);
+        dp.start += radians(q);
+      } else if(dp.end > radians(180)){
+        dp.end -= radians(q);
+        dp.start -= radians(q);
+      }
+      println("dp.end: " + dp.end + " dp.start: " + dp.start);
+
+       fill(dp.r, dp.g, dp.b);
+       arc(dp.slicex, dp.slicey, diameter, diameter, dp.start, dp.end);
+    }
+    */
   }
   
   void setupPoints(){
@@ -222,7 +319,9 @@ class Graph {
     for(int i = 0; i < dplist.size(); i++) {
          DataPoint dp = dplist.get(i);   
          dp.pointx = x_origin + (counter * xproportion);
-         dp.pointy = y_origin - (dp.temp * yaxislength * .006);
+         dp.pointy = y_origin - dp.temp * 3;
+         dp.barpointx = dp.pointx;
+         dp.barpointy = dp.pointy;
          dp.barheight = y_origin - dp.pointy;
          counter++;
      }
@@ -343,12 +442,13 @@ class Graph {
     xaxislength = canvasw - 100;
     yaxislength = y_origin - 50;
     numrows = 15;
+    float rowsize = yaxislength / numrows;
     
     for(int j = 0; j < numrows; j++){
-       line(x_origin, y_origin - (j*35), canvasw - 50, y_origin - (j*35)); 
+       line(x_origin, y_origin - (rowsize * j), canvasw - 50, y_origin - (rowsize * j)); 
        fill(50);
        textSize(7);
-       text((j),x_origin - 15, y_origin -( j * 35));
+       text(Math.round(rowsize * j) / 3,x_origin - 20, y_origin -(rowsize * j));
     }
     
     for(int i = 0; i < dplist.size(); i++){
@@ -376,9 +476,9 @@ class Graph {
     }
     
     setRandomColors();
-    linebutton = new Button((int) canvasw + 40, 100, (int)(sidebarw * .70), 75, "Line Graph");
-    barbutton = new Button((int) canvasw + 40, 250, (int)(sidebarw * .70), 75, "Bar Graph");
-    piebutton = new Button((int) canvasw + 40, 400, (int)(sidebarw * .70), 75, "Pie Graph");
+    linebutton = new Button((int) canvasw + 40, 100, 250, 75, "Line Graph");
+    barbutton = new Button((int) canvasw + 40, 250, 250, 75, "Bar Graph");
+    piebutton = new Button((int) canvasw + 40, 400, 250, 75, "Pie Graph");
     /*
     for(int i = 0; i < dplist.size(); i++) {
       println("Time: " + dplist.get(i).time + " Temp: " + dplist.get(i).temp);
