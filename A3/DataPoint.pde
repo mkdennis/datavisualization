@@ -8,6 +8,7 @@ class DataPoint {
   
   //bar graph attributes
   float barheight, barheight2;
+  float area;
 
   //pie graph attributes
   float degree, arcstart;

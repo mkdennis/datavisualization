@@ -1,0 +1,13 @@
+Additional Requirements
+
+For each of the transitions, I imagined what would make sense to me for a graph to switch its type. For line graph to bar graph, I got rid of the lines and flattened the dot into the top of the bar then increased the barsize downward.
+This transition retains the original data encoding of the y-position of the dot which is also the temperature of the data point.
+
+Bar to pie was a little more tricky. To do this, I made each bar's height into its equivalent circumference when transformed to a pie slice. Then to transform the bar into a slice, I decreased its width to 0, drew a triangle to the right, and drew an arc underneath (filling out the curve part of the arc). I don't think this was the best way to do this being that there are multiple intermediate animations but this is the only way I could think of drawing the pie slice without having the bar
+graph disappear completely. I then move all the slices to the center of the screen and "fan" them out completing the pie graph. To make each datapoint identifiable before and after the transition, I filled different colors for each slice.
+
+From pie to bar, I moved each slice to where it would be as a bar graph and then slowly decreased the arc's size while simultaneously increasing the bar height, almost like it is filling the bar graph up.
+ If I had more time, I would have increased each pie slice until it was the same area as the bar it would become. 
+
+From bar to line, I decreased the bar height until 0, drew ellipses and tried to connect the lines. The hardest part of this assignment was definitely the processing animations not necessarily on a conceptual, data visualization level. 
+

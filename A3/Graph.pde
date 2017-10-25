@@ -13,6 +13,8 @@ class Graph {
    boolean bp4;
    boolean bp5;
    boolean pb1;
+   boolean pb2;
+   boolean bl;
    Button linebutton;
    Button barbutton;
    Button piebutton;
@@ -35,7 +37,8 @@ class Graph {
      bp4 = false;
      bp5 = false;
      pb1 = false;
-     
+     pb2 = false;
+     bl = false;
    }
    
   void display(){
@@ -56,6 +59,7 @@ class Graph {
      bp4 = false;
      bp5 = false;
      pb1 = false;
+     pb2 = false;
   }
    
   void bartoLine(int u){
@@ -64,17 +68,31 @@ class Graph {
       if((dp.barheight - u) > 1){
         fill(col);
         rect(dp.pointx - 10, dp.pointy, 15, dp.barheight - u);
-      } else{
-        fill(col); //change to random colors later
-        ellipse(dp.pointx + 5, dp.pointy, 5, 5);
-        if(i < 23){
-          DataPoint dpnext = dplist.get(i + 1);
-          line(dp.pointx + 5, dp.pointy, dpnext.pointx+u, dp.pointy);
+      } else if(i == dplist.size() - 1){
+        bl = true;
         }
       }
-    }
-    
-    
+  }
+  
+  void bartoLine2(float z){
+      float angle;  
+      fill(col);
+       for(int i = 0; i <dplist.size(); i++){
+            DataPoint dp = dplist.get(i);
+           ellipse(dp.pointx + 5, dp.pointy, 5, 5);
+       }
+
+      
+      for(int i = 0; i <dplist.size() - 1; i++){
+            DataPoint dp = dplist.get(i);
+            DataPoint dpnext = dplist.get(i + 1);
+          
+            angle = atan(radians(abs(dp.pointy - dpnext.pointy)/abs(dpnext.pointx - dp.pointx)));
+            if(dp.pointx + 5 + cos((angle)) * z < dpnext.pointx)
+              line(dp.pointx + 5, dp.pointy, dp.pointx + 5 + cos(angle) * z, dp.pointy + sin(angle) * z);
+            else
+              line(dp.pointx + 5, dp.pointy, dpnext.pointx + 5, dpnext.pointy);
+        }
   }
  
  //decrease height of bars
@@ -237,25 +255,22 @@ class Graph {
     */
     
   }
-  
-  
+    
   void pietoBar(float q){
     //resets bar heights
     for(int i = 0; i < dplist.size(); i++){
       DataPoint dp = dplist.get(i);
       
-      if(dp.slicey > dp.pointy - 20 && dp.slicey < dp.pointy + 20){
-        if(dp.slicex > dp.pointx - 20 && dp.slicex < dp.pointx + 20){
+      if(dp.slicey > dp.pointy - 10 && dp.slicey < dp.pointy + 10){
+        if(dp.slicex > dp.pointx - 10 && dp.slicex < dp.pointx + 10){
           if(i == dplist.size() - 1){
               pb1 = true;
-              println("pb1 = true");
           }
           fill(dp.r, dp.g, dp.b);
           arc(dp.slicex, dp.slicey, diameter, diameter, dp.start, dp.end);
           continue;
         }
       }
-      println("dp.slicey: " + dp.slicey + " dp.pointy: " + dp.pointy + "dp.slicex: " + dp.slicex + " dp.pointx: " + dp.pointx);
       
       if(dp.pointx > dp.slicex){
           if(dp.slicex + q < dp.pointx){
@@ -323,6 +338,7 @@ class Graph {
          dp.barpointx = dp.pointx;
          dp.barpointy = dp.pointy;
          dp.barheight = y_origin - dp.pointy;
+         dp.area = (15) * (dp.barheight);
          counter++;
      }
      

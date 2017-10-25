@@ -24,6 +24,7 @@ int z = 0;
 int u = 0;
 int a = 0;
 float g = 0;
+float x = 0;
 
 void draw(){
     graph.display();
@@ -68,9 +69,12 @@ void draw(){
       }
       //pietoBar();
     } else if(state == 5){
+      if(graph.bl){
+        graph.bartoLine2(x);
+        x += .7;
+      }
       graph.bartoLine(u++);
     }
-    
 }
 
 int state = 1;
@@ -87,6 +91,7 @@ void resetTimer(){
     u = 0;
     a = 0;
     g = 0;
+    x = 0;
     graph.resetbools();
 }
 
@@ -105,7 +110,4 @@ void mousePressed(){
         state = 4; //pie to bar
         k = 0;
      }
-     
-     
-    println("state: " + state);
 }
