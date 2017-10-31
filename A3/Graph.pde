@@ -95,8 +95,42 @@ class Graph {
         }
   }
  
- //decrease height of bars
+ //figure out pie arc positions
+ //decrease height of bars while also creating pie slices
+ //move slices to center
   void bartoPie(int r){
+    
+    float lastAngle = radians(270);  
+    
+    for(int i = 0; i < dplist.size(); i++){
+        DataPoint dp = dplist.get(i);
+        dp.start = lastAngle;
+        lastAngle += radians(dp.degree);
+        dp.end = lastAngle;
+        dp.slicex = dp.pointx;
+        dp.slicey = dp.pointy;
+    }
+    
+    for(int i = 0; i < dplist.size(); i++){
+      DataPoint dp = dplist.get(i);
+      fill(dp.r, dp.g, dp.b);
+      if(r < diameter)
+      arc(dp.slicex, dp.slicey, r, r, dp.start, dp.end);
+      else{
+        bp1 = true;
+        arc(dp.slicex, dp.slicey, diameter, diameter, dp.start, dp.end);
+      }        
+    }
+    
+     for(int i = 0; i < dplist.size(); i++) {
+        DataPoint dp = dplist.get(i);  
+        fill(dp.r, dp.g, dp.b);
+        if((dp.barheight - r) > 0){
+          rect(dp.pointx - 10, dp.pointy, 15, dp.barheight - r);
+        } 
+      }  
+    
+    /*
     for(int i = 0; i < dplist.size(); i++){
         DataPoint dp = dplist.get(i);
         dp.barheight2 = 2 * PI * (diameter/2) * (dp.degree / 360);
@@ -114,10 +148,54 @@ class Graph {
         bp1 = true;
       }
     }
+    */
   }
   
   //shorten bar width (maybe change to draw rectangle on side of rectangle?)
-  void bartoPie2(int s){
+  void bartoPie2(float q){
+     
+      for(int i = 0; i < dplist.size(); i++){
+        DataPoint dp = dplist.get(i);
+        if(dp.slicey > canvash/2 - 2 && dp.slicey < canvash/2 + 2){
+          if(dp.slicex > canvasw/2 - 2 && dp.slicex < canvasw/2 + 2){
+            if(i == dplist.size() - 1){
+                bp2 = true;
+            }
+            fill(dp.r, dp.g, dp.b);
+            arc(canvasw/2, canvash/2, diameter, diameter, dp.start, dp.end);
+            continue;
+          }
+        }
+        
+        if(dp.slicex < canvasw / 2){
+            if(dp.slicex + q < canvasw / 2){
+              dp.slicex += q;
+            }
+        } else if(dp.slicex > canvasw / 2){
+          if(dp.slicex - q > canvasw / 2){
+             dp.slicex -= q;
+          }
+        }
+        
+        if(dp.slicey > canvash/2){
+            if(dp.slicey - q > canvash / 2){
+              dp.slicey -= q;
+            } 
+        } else if(dp.slicey < canvash/2) {
+            if(dp.slicey + q < canvash/2) {
+               dp.slicey += q;
+            }
+        }     
+        fill(dp.r, dp.g, dp.b);
+        arc(dp.slicex, dp.slicey, diameter, diameter, dp.start, dp.end);
+        //println("dp.slicex: " + dp.slicex);
+        //println("dp.slicey: " + dp.slicey);
+    }
+      
+      
+    
+      
+      /*
       fill(col);
       float barwidth = 15 - (s * .3);
       for(int i = 0; i < dplist.size(); i++) {
@@ -131,11 +209,21 @@ class Graph {
           bp2 = true;
         }
       } 
+      */
       
   }
   
  //draw triangle slices
-  void bartoPie3(int t) {
+  void bartoPie3() {
+      
+    for(int i = 0; i < dplist.size(); i++){
+        DataPoint dp = dplist.get(i);
+        fill(dp.r, dp.g, dp.b);
+        println("called");
+        arc(canvasw/2, canvash/2, diameter, diameter, dp.start, dp.end);
+      }        
+      
+      /*
       fill(col);
       for(int i = 0; i < dplist.size(); i++){
          DataPoint dp = dplist.get(i);
@@ -149,6 +237,7 @@ class Graph {
          }
          //arc(dp.pointx, dp.pointy + (barheight2/2), 40, 40,
       }
+    */
       
   }
   
@@ -217,7 +306,7 @@ class Graph {
       }
             
       fill(dp.r, dp.g, dp.b);
-      arc(dp.slicex, dp.slicey, diameter, diameter, PI - dp.arcstart, PI - dp.arcstart + radians(dp.degree));
+      arc(dp.slicex, dp.slicey, diameter, diameter, dp.start, dp.end);
     }
    
   }
@@ -262,7 +351,7 @@ class Graph {
       DataPoint dp = dplist.get(i);
       
       if(dp.slicey > dp.pointy - 10 && dp.slicey < dp.pointy + 10){
-        if(dp.slicex > dp.pointx - 10 && dp.slicex < dp.pointx + 10){
+        if(dp.slicex > dp.pointx - 5 && dp.slicex < dp.pointx + 5){
           if(i == dplist.size() - 1){
               pb1 = true;
           }
@@ -299,7 +388,6 @@ class Graph {
   }
   
   void pietoBar2(int q){
-    
     for(int i = 0; i < dplist.size(); i++){
       DataPoint dp = dplist.get(i);
       fill(col);

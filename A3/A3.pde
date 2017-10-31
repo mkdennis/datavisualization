@@ -39,7 +39,15 @@ void draw(){
         k += 3;
       }
     } else if(state == 3){ 
-          if(graph.bp5){
+          if(graph.bp2){
+            graph.bartoPie3();
+          } else if(graph.bp1){
+            graph.bartoPie2(q);
+            q += .01;
+          } else
+            graph.bartoPie(r++);
+            
+          /*if(graph.bp5){
              graph.bartoPie6(z++);
           }
           else if(graph.bp4){
@@ -59,7 +67,7 @@ void draw(){
              graph.bartoPie(r); //shrink bars
              r += 4; 
           }
-          
+          */
     } else if(state == 4){
       if(graph.pb1){
           graph.pietoBar2(a++);
