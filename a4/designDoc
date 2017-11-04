@@ -1,0 +1,16 @@
+1.
+
+The three visualizations we are using are a Sunburst Chart (a multi-tierd pie chart), a histogram, and a node-relation chart (this is probably called something else)
+
+2.
+
+histogram keeps track of temporal info, sunburst chart is complete breakdown at timestep specified by histogram, node-relation chart keeps track of which sources are targetting which targets
+
+3.
+
+Drilling into piechart (clicking) changes the other views. If piechart is at top level, histogram has one line per class, and the node-relation chart has one ball on the left per class. The next level, histogram has one line per player of class focused, as does the node relation chart nodes. Next level, histogram has one line per spell of player focused, as does the node relation chart balls.
+
+4.
+One CMV class, and one class per visualization type (views)
+ParsedLog, this is the preprocessed data (model)
+Many other classes for control (Cast, Character, ClassColors, etc)
