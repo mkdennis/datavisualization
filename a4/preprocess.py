@@ -2,9 +2,10 @@
 
 import random
 import os.path
+import getClass
 
 def main():
-	classes = ["DEATHKNIGHT", "DEMONHUNTER","DRUID","HUNTER","MAGE","MONK","PALADIN","PRIEST","ROGUE","SHAMAN","WARLOCK","WARRIOR"]
+	classes = ["DEATHKNIGHT","DEMONHUNTER","DRUID","HUNTER","MAGE","MONK","PALADIN","PRIEST","ROGUE","SHAMAN","WARLOCK","WARRIOR"]
 	content = []
 	charsSeen = set()
 	targetsSeen = set()
@@ -17,20 +18,21 @@ def main():
 	for line in content:
 		if line.split(" ")[3].split(",")[0] == "SPELL_DAMAGE":
 			if line.split(" ")[3].split(",")[1].split("-")[0] == "Player":
-				char = line.split(",")[2].split("\"")[1].split("-")[0]
-				tar = line.split(",")[6].split("\"")[1]
-				if char not in charsSeen:
-					if char == "Chàrizard":
-						chars.append((char, "MAGE"))
-					else:
-						randomClass = random.choice(classes)
-						chars.append((char, randomClass))
+				try:
+					char = line.split(",")[2].split("\"")[1]
+					tar = line.split(",")[6].split("\"")[1]
+					if char not in charsSeen:
 
-				if tar not in targetsSeen:
-					targets.append(tar)
+						chars.append((char.split("-")[0], getClass.getClass(char)))
 
-				charsSeen.add(char)
-				targetsSeen.add(tar)
+					if tar not in targetsSeen:
+						targets.append(tar)
+
+					charsSeen.add(char)
+					targetsSeen.add(tar)
+				except KeyError: 
+					charsSeen.add(char)
+					print("Oops! Couldnt find character " + char + "\n")
 
 	sortedChars = sorted(sorted(chars, key = lambda tup:tup[0]), key = lambda tup: classes.index(tup[1]))
 	sortedTars = sorted(targets)

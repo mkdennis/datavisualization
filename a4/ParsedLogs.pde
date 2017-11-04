@@ -27,11 +27,11 @@ public class ParsedLogs {
     numTargets = Integer.parseInt(lines[numChars+1]);
     targets = new String[numTargets];
     for(int i=0; i<numTargets; i++){
-      targets[i] = lines[i+numTargets+2];
+      targets[i] = lines[i+numTargets+4];
     }
     for(String t : targets){
-      print(t);
-    }
+      print(t + "\n");
+    } 
     
     String startTimestamp = lines[numChars+2].split(" ")[1];
     startTime = startTimestamp.substring(0, startTimestamp.length()-4);
@@ -353,4 +353,26 @@ public class ParsedLogs {
     
     return totalDamage;
   }
+  //public getDamageToTarget(int i){
+  //  String target = targets[i];
+  public int[] getDamageDoneToTargets(){
+    int[] damageToTargets = new int[numTargets];
+    for(int i=0; i<numTargets; i++){
+      damageToTargets[i] = 0;
+    }
+    for(Character c : characters){
+      for(Cast cast : c.casts){
+        if(cast != null){
+          
+          print(cast.target + "\n");
+          print(Arrays.asList(targets).indexOf(cast.target) + "\n\n");
+        
+          damageToTargets[Arrays.asList(targets).indexOf(cast.target)] += Integer.parseInt(cast.damageDone);
+        }
+      }
+    }
+    return damageToTargets;
+  }
+  
+        
 } 

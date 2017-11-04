@@ -15,6 +15,9 @@ public class Node {
     value = v;
     
     fill = f;
+    
+    xPos = x;
+    yPos = y;
   }
   
   public void drawNode(){

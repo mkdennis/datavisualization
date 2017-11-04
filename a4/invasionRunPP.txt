@@ -1,18 +1,17 @@
-14
+13
+Padgarios-DEATHKNIGHT
 Winterwings-DEATHKNIGHT
-Dirkon-DEMONHUNTER
-Deathhammer-DRUID
-Resoka-HUNTER
 Chàrizard-MAGE
-Xiaoabu-MAGE
-Cassezvous-MONK
-Dreamlost-PALADIN
-Wîllów-PALADIN
-Exoskeleton-PRIEST
-Padgarios-ROGUE
-Paxi-WARLOCK
-Blackcuillin-WARRIOR
-Totempledge-WARRIOR
+Dirkon-MAGE
+Resoka-MONK
+Cassezvous-PALADIN
+Deathhammer-PALADIN
+Paxi-PRIEST
+Wîllów-PRIEST
+Blackcuillin-ROGUE
+Totempledge-SHAMAN
+Dreamlost-WARLOCK
+Exoskeleton-WARRIOR
 11
 Bladesworn Disciple
 Burning Hound
